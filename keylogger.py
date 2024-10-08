@@ -3,7 +3,7 @@ import ctypes
 import time
 
 serverAddress = ("192.168.100.91",3000)
-clientsocket = socket.socket(socket.AF_INEF,socket.SOCK_STREAM)
+clientsocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 clientsocket.connect(serverAddress)
 
 user = ctypes.windll.users32
