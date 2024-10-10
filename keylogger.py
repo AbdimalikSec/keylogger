@@ -11,9 +11,10 @@ user = ctypes.windll.user32
 def getkey(code):
     asciiTable = {
         "0": "[NUL]",
-        "1": "[LCLICK]",
+        "1": "[LCLICK]", ...etc.
     }
-    return asciiTable.get(code, "")
+    #return asciiTable.get(code, "")
+    return asciiTable[code]
 
 def main():
     keyStates = {}  # keep track if each key is pressed
