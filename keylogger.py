@@ -10,8 +10,6 @@ user = ctypes.windll.user32
 
 def getkey(code):
     asciiTable = {
-        "0": "[NUL]",
-        "1": "[LCLICK]",
         "a": "a",
         "b": "b",
         "c": "c",
